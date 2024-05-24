@@ -1,6 +1,5 @@
 package org.custom;
 
-
 import com.google.auto.service.AutoService;
 import com.google.errorprone.BugPattern;
 import com.google.errorprone.VisitorState;
