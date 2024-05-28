@@ -170,6 +170,20 @@ log.debug("Processing item {}", i);
 
 ```
 
+```markdown
+[Loggers created using enclosing class](#loggers-created-using-enclosing-class)
+[Logger should not use throwable parameter](#logger-should-not-use-throwable-parameter)
+[Prefer parameterized logging methods](#prefer-parameterized-logging-methods)
+[Allow only compile-time constant for log](#allow-only-compile-time-constant-for-log)
+[Don't log sensitive data](#dont-log-sensitive-data)
+[Loggers require throwables to be the last parameter](#loggers-require-throwables-to-be-the-last-parameter)
+[Logging error them before handling them](#logging-error-them-before-handling-them)
+[Only the error log level should be logged in the catch block](#only-the-error-log-level-should-be-logged-in-the-catch-block)
+[Log statement in the catch block does not log the caught exception](#log-statement-in-the-catch-block-does-not-log-the-caught-exception)
+[Log placeholders count](#log-placeholders-count)
+[Avoid logging sensitive data directly](#avoid-logging-sensitive-data-directly)
+[Don't log inside a loop](#dont-log-inside-a-loop)
+```
 
 
  
