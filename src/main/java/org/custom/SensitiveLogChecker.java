@@ -15,7 +15,7 @@ import java.util.regex.Pattern;
 @AutoService(BugChecker.class)
 @BugPattern(
         name = "SensitiveLogChecker",
-        link = "https://backbase.atlassian.net/wiki/spaces/GUIL/pages/922386858/Logging#",
+        link = "https://github.com/Backbase/logging-error-prone/blob/develop/docs/LoggingRules.md#dont-log-sensitive-data",
         linkType = BugPattern.LinkType.CUSTOM,
         severity = BugPattern.SeverityLevel.ERROR,
         summary = "You use debug or info log method in catch block.")

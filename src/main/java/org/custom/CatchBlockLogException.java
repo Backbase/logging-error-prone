@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 @AutoService(BugChecker.class)
 @BugPattern(
         name = "CatchBlockLogException",
-        link = "https://backbase.atlassian.net/wiki/spaces/GUIL/pages/922386858/Logging#",
+        link = "https://github.com/Backbase/logging-error-prone/blob/develop/docs/LoggingRules.md#log-statement-in-the-catch-block-does-not-log-the-caught-exception",
         linkType = BugPattern.LinkType.CUSTOM,
         severity = BugPattern.SeverityLevel.ERROR,
         summary = "You use debug or info log method in catch block.")

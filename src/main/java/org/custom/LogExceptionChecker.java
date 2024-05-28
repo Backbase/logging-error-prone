@@ -17,6 +17,8 @@ import static com.google.errorprone.BugPattern.SeverityLevel.ERROR;
 @BugPattern(
         name = "LogExceptionInCatch",
         summary = "Log statement in the catch block does not log the caught exception.",
+        link = "https://github.com/Backbase/logging-error-prone/blob/develop/docs/LoggingRules.md#log-statement-in-the-catch-block-does-not-log-the-caught-exception",
+        linkType = BugPattern.LinkType.CUSTOM,
         severity = ERROR
 )
 public final class LogExceptionChecker extends BugChecker implements BugChecker.CatchTreeMatcher {

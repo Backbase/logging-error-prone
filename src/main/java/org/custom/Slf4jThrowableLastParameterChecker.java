@@ -16,7 +16,7 @@ import java.util.regex.Pattern;
 @AutoService(BugChecker.class)
 @BugPattern(
         name = "Slf4jThrowableLastParameterChecker",
-        link = "http://www.slf4j.org/faq.html#paramException",
+        link = "https://github.com/Backbase/logging-error-prone/blob/develop/docs/LoggingRules.md#loggers-require-throwables-to-be-the-last-parameter",
         linkType = BugPattern.LinkType.CUSTOM,
         severity = BugPattern.SeverityLevel.ERROR,
         summary = "Slf4j loggers require throwables to be the last parameter otherwise a stack trace is not produced."

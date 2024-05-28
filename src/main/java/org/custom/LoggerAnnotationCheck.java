@@ -16,7 +16,7 @@ import com.sun.tools.javac.code.Symbol;
 @AutoService(BugChecker.class)
 @BugPattern(
         name = "LoggerAnnotationCheck",
-        link = "https://backbase.atlassian.net/wiki/spaces/GUIL/pages/922386858/Logging#",
+        link = "https://github.com/Backbase/logging-error-prone/blob/develop/docs/LoggingRules.md#loggers-created-using-enclosing-class",
         linkType = BugPattern.LinkType.CUSTOM,
         severity = BugPattern.SeverityLevel.ERROR,
         summary = "Do not create Loggers using getLogger(Class<?>), Logger should be created using @Slf4j annotation.")

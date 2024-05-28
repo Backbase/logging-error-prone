@@ -19,7 +19,8 @@ import java.util.regex.Pattern;
         name = "LogPlaceholderChecker",
         summary = "Check that placeholders in log messages ({}) match the number of parameters provided.",
         severity = BugPattern.SeverityLevel.ERROR,
-        linkType = BugPattern.LinkType.NONE
+        link = "https://github.com/Backbase/logging-error-prone/blob/develop/docs/LoggingRules.md#log-placeholders-count",
+        linkType = BugPattern.LinkType.CUSTOM
 )
 public final class LogPlaceholderChecker extends BugChecker implements MethodInvocationTreeMatcher {
 

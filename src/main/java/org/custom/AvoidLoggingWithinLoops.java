@@ -19,6 +19,8 @@ import static com.google.errorprone.BugPattern.SeverityLevel.ERROR;
 @BugPattern(
         name = "AvoidLoggingWithinLoops",
         summary = "Logging within loops should be avoided to prevent unnecessary logging overhead.",
+        link = "https://github.com/Backbase/logging-error-prone/blob/develop/docs/LoggingRules.md#dont-log-inside-a-loop",
+        linkType = BugPattern.LinkType.CUSTOM,
         severity = ERROR
 )
 public final class AvoidLoggingWithinLoops extends BugChecker implements BugChecker.ForLoopTreeMatcher {

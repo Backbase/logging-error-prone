@@ -15,7 +15,7 @@ import java.util.List;
 @AutoService(BugChecker.class)
 @BugPattern(
         name = "LogBeforeHandleException",
-        link = "https://example.com/LogBeforeHandleException",
+        link = "https://github.com/Backbase/logging-error-prone/blob/develop/docs/LoggingRules.md#logging-error-them-before-handling-them",
         linkType = BugPattern.LinkType.CUSTOM,
         severity = BugPattern.SeverityLevel.ERROR,
         summary = "When catching exceptions, consider logging them before handling them."
