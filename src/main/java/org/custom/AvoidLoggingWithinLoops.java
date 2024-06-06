@@ -23,6 +23,7 @@ import static com.google.errorprone.BugPattern.SeverityLevel.ERROR;
         linkType = BugPattern.LinkType.CUSTOM,
         severity = ERROR
 )
+@SuppressWarnings("AvoidLoggingWithinLoops")
 public final class AvoidLoggingWithinLoops extends BugChecker implements BugChecker.ForLoopTreeMatcher {
 
     private static final com.sun.source.util.TreeScanner<Name, Void> GET_METHOD_NAME =

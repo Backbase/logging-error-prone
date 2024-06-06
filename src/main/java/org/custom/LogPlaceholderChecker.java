@@ -22,6 +22,7 @@ import java.util.regex.Pattern;
         link = "https://github.com/Backbase/logging-error-prone/blob/develop/docs/LoggingRules.md#log-placeholders-count",
         linkType = BugPattern.LinkType.CUSTOM
 )
+@SuppressWarnings("LogPlaceholderChecker")
 public final class LogPlaceholderChecker extends BugChecker implements MethodInvocationTreeMatcher {
 
     private static final Pattern PLACEHOLDER_PATTERN = Pattern.compile("\\{}");

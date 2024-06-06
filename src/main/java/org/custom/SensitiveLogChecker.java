@@ -19,6 +19,7 @@ import java.util.regex.Pattern;
         linkType = BugPattern.LinkType.CUSTOM,
         severity = BugPattern.SeverityLevel.ERROR,
         summary = "You use debug or info log method in catch block.")
+@SuppressWarnings("SensitiveLogChecker")
 public final class SensitiveLogChecker extends BugChecker implements BugChecker.MethodInvocationTreeMatcher {
 
     private static final Pattern SENSITIVE_PATTERN = Pattern.compile("(?i)password|apikey|token|secret");

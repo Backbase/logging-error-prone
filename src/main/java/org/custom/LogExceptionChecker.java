@@ -21,6 +21,7 @@ import static com.google.errorprone.BugPattern.SeverityLevel.ERROR;
         linkType = BugPattern.LinkType.CUSTOM,
         severity = ERROR
 )
+@SuppressWarnings("LogExceptionInCatch")
 public final class LogExceptionChecker extends BugChecker implements BugChecker.CatchTreeMatcher {
 
     @Override

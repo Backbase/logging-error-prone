@@ -20,6 +20,7 @@ import java.util.List;
         severity = BugPattern.SeverityLevel.ERROR,
         summary = "When catching exceptions, consider logging them before handling them."
 )
+@SuppressWarnings("LogBeforeHandleException")
 public final class LogBeforeHandleExceptionChecker extends BugChecker implements BugChecker.CatchTreeMatcher {
 
     @Override

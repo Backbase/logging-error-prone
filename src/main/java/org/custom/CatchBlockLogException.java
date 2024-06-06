@@ -26,6 +26,7 @@ import javax.annotation.Nullable;
         linkType = BugPattern.LinkType.CUSTOM,
         severity = BugPattern.SeverityLevel.ERROR,
         summary = "You use debug or info log method in catch block.")
+@SuppressWarnings("CatchBlockLogException")
 public final class CatchBlockLogException extends BugChecker implements BugChecker.CatchTreeMatcher {
 
     private static final long serialVersionUID = 1L;

@@ -20,6 +20,7 @@ import com.sun.tools.javac.code.Symbol;
         linkType = BugPattern.LinkType.CUSTOM,
         severity = BugPattern.SeverityLevel.ERROR,
         summary = "Do not create Loggers using getLogger(Class<?>), Logger should be created using @Slf4j annotation.")
+@SuppressWarnings("LoggerAnnotationCheck")
 public final class LoggerAnnotationCheck extends BugChecker implements BugChecker.VariableTreeMatcher {
 
     private static final Matcher<VariableTree> matcher = Matchers.allOf(

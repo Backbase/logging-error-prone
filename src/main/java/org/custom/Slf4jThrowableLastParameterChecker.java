@@ -21,6 +21,7 @@ import java.util.regex.Pattern;
         severity = BugPattern.SeverityLevel.ERROR,
         summary = "Slf4j loggers require throwables to be the last parameter otherwise a stack trace is not produced."
 )
+@SuppressWarnings("Slf4jThrowableLastParameterChecker")
 public final class Slf4jThrowableLastParameterChecker extends BugChecker implements MethodInvocationTreeMatcher {
 
     private static final long serialVersionUID = 1L;
