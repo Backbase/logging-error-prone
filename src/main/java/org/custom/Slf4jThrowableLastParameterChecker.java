@@ -13,6 +13,9 @@ import com.sun.source.tree.MethodInvocationTree;
 import java.util.List;
 import java.util.regex.Pattern;
 
+/**
+ * A BugChecker that ensures SLF4J loggers have Throwable as the last parameter.
+ */
 @AutoService(BugChecker.class)
 @BugPattern(
         name = "Slf4jThrowableLastParameterChecker",
@@ -32,6 +35,13 @@ public final class Slf4jThrowableLastParameterChecker extends BugChecker impleme
 
     private static final Matcher<ExpressionTree> THROWABLE = MoreMatchers.isSubtypeOf(Throwable.class);
 
+    /**
+     * Matches method invocations to ensure SLF4J loggers have Throwable as the last parameter.
+     *
+     * @param tree    The method invocation tree to match against.
+     * @param state   The current visitor state.
+     * @return A description of the match, including suggested fixes if applicable.
+     */
     @Override
     public Description matchMethodInvocation(MethodInvocationTree tree, VisitorState state) {
         if (!LOG_METHOD.matches(tree, state)) {

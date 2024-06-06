@@ -9,17 +9,22 @@ import com.google.errorprone.matchers.Description;
 import com.google.errorprone.matchers.Matcher;
 import com.google.errorprone.matchers.Matchers;
 import com.google.errorprone.matchers.method.MethodMatchers;
-import com.google.errorprone.util.ASTHelpers;
 import com.sun.source.tree.*;
-import com.sun.tools.javac.code.Symbol;
+import com.sun.source.util.TreePath;
 
+/**
+ * A BugChecker that ensures Loggers are created using the @Slf4j annotation.
+ * This checker identifies loggers created using LoggerFactory.getLogger(Class<?>)
+ * and suggests using the @Slf4j annotation instead.
+ */
 @AutoService(BugChecker.class)
 @BugPattern(
         name = "LoggerAnnotationCheck",
         link = "https://github.com/Backbase/logging-error-prone/blob/develop/docs/LoggingRules.md#loggers-created-using-enclosing-class",
         linkType = BugPattern.LinkType.CUSTOM,
         severity = BugPattern.SeverityLevel.ERROR,
-        summary = "Do not create Loggers using getLogger(Class<?>), Logger should be created using @Slf4j annotation.")
+        summary = "Do not create Loggers using getLogger(Class<?>), Logger should be created using @Slf4j annotation."
+)
 @SuppressWarnings("LoggerAnnotationCheck")
 public final class LoggerAnnotationCheck extends BugChecker implements BugChecker.VariableTreeMatcher {
 
@@ -29,9 +34,16 @@ public final class LoggerAnnotationCheck extends BugChecker implements BugChecke
             Matchers.variableInitializer(MethodMatchers.staticMethod()
                     .onClass("org.slf4j.LoggerFactory")
                     .named("getLogger")
-                    )
+            )
     );
 
+    /**
+     * Matches variable declarations to ensure loggers are created using @Slf4j annotation.
+     *
+     * @param tree  The variable tree to match against.
+     * @param state The current visitor state.
+     * @return A description of the match, including suggested fixes.
+     */
     @Override
     public Description matchVariable(VariableTree tree, VisitorState state) {
         if (!matcher.matches(tree, state)) {
@@ -39,26 +51,26 @@ public final class LoggerAnnotationCheck extends BugChecker implements BugChecke
         }
 
         MethodInvocationTree getLoggerInvocation = (MethodInvocationTree) tree.getInitializer();
-        Symbol.ClassSymbol enclosingClassSymbol = ASTHelpers.enclosingClass(ASTHelpers.getSymbol(tree));
 
+        // Get the enclosing class symbol
+        TreePath path = state.getPath();
+        while (path != null && !(path.getLeaf() instanceof ClassTree)) {
+            path = path.getParentPath();
+        }
+
+        if (path == null) {
+            return Description.NO_MATCH;
+        }
+
+        ClassTree enclosingClass = (ClassTree) path.getLeaf();
         SuggestedFix.Builder fix = SuggestedFix.builder();
         String message = "Logger should be created using @Slf4j annotation.";
 
-        // Get the class declaration tree
-        ClassTree classTree = ASTHelpers.findEnclosingNode(state.getPath(), ClassTree.class);
-        if (classTree != null) {
-            Tree.Kind kind = classTree.getKind();
-            // Ensure it's a class declaration
-            if (kind == Tree.Kind.CLASS || kind == Tree.Kind.ENUM || kind == Tree.Kind.INTERFACE) {
-                // Add @Slf4j annotation to the class declaration
-                fix.prefixWith(classTree, "@Slf4j\n");
-                return buildDescription(tree)
-                        .setMessage(message)
-                        .addFix(fix.build())
-                        .build();
-            }
-        }
-
-        return Description.NO_MATCH;
+        // Add @Slf4j annotation to the class declaration
+        fix.prefixWith(enclosingClass, "@Slf4j\n");
+        return buildDescription(tree)
+                .setMessage(message)
+                .addFix(fix.build())
+                .build();
     }
 }

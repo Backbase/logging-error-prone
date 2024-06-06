@@ -18,9 +18,18 @@
                 <version>1.0-SNAPSHOT</version>
             </path>
         </annotationProcessorPaths>
+        <compilerArgs>
+            <arg>-XDcompilePolicy=simple</arg>
+            <arg>-Xplugin:ErrorProne</arg>
+        </compilerArgs>
     </configuration>
 </plugin>
 ```
+If you want to disable some check from the list you should use this <arg> 
+``` java
+<arg>-Xplugin:ErrorProne -Xep:{Name of your checker}:OFF</arg>
+```
+
 2. Add the following to the .mvn/jvm.config file
 ``` java
 --add-exports jdk.compiler/com.sun.tools.javac.api=ALL-UNNAMED

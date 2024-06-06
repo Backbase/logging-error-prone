@@ -19,6 +19,10 @@ import java.util.Optional;
 import java.util.regex.Pattern;
 import javax.annotation.Nullable;
 
+/**
+ * A BugChecker that ensures no logging of sensitive information in catch blocks.
+ * This checker will match and report logging statements in catch blocks that use debug or info methods.
+ */
 @AutoService(BugChecker.class)
 @BugPattern(
         name = "CatchBlockLogException",
@@ -38,6 +42,14 @@ public final class CatchBlockLogException extends BugChecker implements BugCheck
     private static final Matcher<Tree> containslogMethod =
             Matchers.contains(Matchers.toType(ExpressionTree.class, logMethod));
 
+
+    /**
+     * Matches catch blocks that contain debug or info log methods.
+     *
+     * @param tree  The catch tree to match against.
+     * @param state The current visitor state.
+     * @return A description of the match, including suggested fixes.
+     */
     @Override
     public Description matchCatch(CatchTree tree, VisitorState state) {
         if (containslogMethod.matches(tree, state)) {
@@ -49,6 +61,14 @@ public final class CatchBlockLogException extends BugChecker implements BugCheck
         return Description.NO_MATCH;
     }
 
+
+    /**
+     * Attempts to provide a suggested fix for the matched catch block.
+     *
+     * @param tree  The catch tree containing the logging statement.
+     * @param state The current visitor state.
+     * @return A suggested fix to replace the offending log statement.
+     */
     private static SuggestedFix attemptFix(CatchTree tree, VisitorState state) {
         List<MethodInvocationTree> matchingLoggingStatements =
                 tree.getBlock().accept(LogStatementScanner.INSTANCE, state);
@@ -74,6 +94,10 @@ public final class CatchBlockLogException extends BugChecker implements BugCheck
 //                      "log.error").build();
     }
 
+
+    /**
+     * Visitor to check if a method invocation contains a throwable's getMessage call.
+     */
     private static final class ThrowableFromArgVisitor extends SimpleTreeVisitor<Optional<String>, VisitorState> {
         private static final ThrowableFromArgVisitor INSTANCE = new ThrowableFromArgVisitor();
 
@@ -94,6 +118,9 @@ public final class CatchBlockLogException extends BugChecker implements BugCheck
         }
     }
 
+    /**
+     * Visitor to extract the expression from a throwable's getMessage method invocation.
+     */
     private static final class ThrowableFromInvocationVisitor
             extends SimpleTreeVisitor<Optional<String>, VisitorState> {
         private static final ThrowableFromInvocationVisitor INSTANCE = new ThrowableFromInvocationVisitor();
@@ -111,6 +138,9 @@ public final class CatchBlockLogException extends BugChecker implements BugCheck
         }
     }
 
+    /**
+     * Scanner to find log method invocations within a tree.
+     */
     private static final class LogStatementScanner extends TreeScanner<List<MethodInvocationTree>, VisitorState> {
         private static final LogStatementScanner INSTANCE = new LogStatementScanner();
 

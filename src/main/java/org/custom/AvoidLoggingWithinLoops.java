@@ -15,6 +15,10 @@ import javax.lang.model.element.Name;
 
 import static com.google.errorprone.BugPattern.SeverityLevel.ERROR;
 
+/**
+ * A BugChecker that ensures logging is not performed within loops.
+ * This checker matches for loops that contain logging statements to avoid unnecessary logging overhead.
+ */
 @AutoService(BugChecker.class)
 @BugPattern(
         name = "AvoidLoggingWithinLoops",
@@ -26,6 +30,9 @@ import static com.google.errorprone.BugPattern.SeverityLevel.ERROR;
 @SuppressWarnings("AvoidLoggingWithinLoops")
 public final class AvoidLoggingWithinLoops extends BugChecker implements BugChecker.ForLoopTreeMatcher {
 
+    /**
+     * A TreeScanner to extract the method name from a method invocation tree.
+     */
     private static final com.sun.source.util.TreeScanner<Name, Void> GET_METHOD_NAME =
             new com.sun.source.util.TreeScanner<Name, Void>() {
                 @Override
@@ -44,6 +51,13 @@ public final class AvoidLoggingWithinLoops extends BugChecker implements BugChec
                 }
             };
 
+    /**
+     * Matches for loops that contain logging statements to avoid logging overhead within loops.
+     *
+     * @param forLoopTree The for loop tree to match against.
+     * @param state       The current visitor state.
+     * @return A description of the match, including suggested fixes.
+     */
     @Override
     public Description matchForLoop(ForLoopTree forLoopTree, VisitorState state) {
         StatementTree statement = forLoopTree.getStatement();
@@ -65,6 +79,12 @@ public final class AvoidLoggingWithinLoops extends BugChecker implements BugChec
         return Description.NO_MATCH;
     }
 
+    /**
+     * Extracts the method name from the given tree expression.
+     *
+     * @param expression The tree expression to extract the method name from.
+     * @return The method name, or null if the expression is not a method invocation.
+     */
     private Name getMethodName(Tree expression) {
         if (expression.getKind() == Tree.Kind.METHOD_INVOCATION) {
             com.sun.source.tree.MethodInvocationTree methodInvocationTree = (com.sun.source.tree.MethodInvocationTree) expression;

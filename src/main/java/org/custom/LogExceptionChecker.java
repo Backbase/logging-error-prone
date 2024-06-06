@@ -13,6 +13,10 @@ import javax.lang.model.element.Name;
 
 import static com.google.errorprone.BugPattern.SeverityLevel.ERROR;
 
+/**
+ * A BugChecker that ensures exceptions are logged within catch blocks.
+ * This checker identifies catch blocks where the caught exception is not logged.
+ */
 @AutoService(BugChecker.class)
 @BugPattern(
         name = "LogExceptionInCatch",
@@ -24,6 +28,15 @@ import static com.google.errorprone.BugPattern.SeverityLevel.ERROR;
 @SuppressWarnings("LogExceptionInCatch")
 public final class LogExceptionChecker extends BugChecker implements BugChecker.CatchTreeMatcher {
 
+    private static final String LOG_METHOD_NAME = ".error";
+
+    /**
+     * Matches catch blocks to ensure exceptions are logged.
+     *
+     * @param catchTree The catch tree to match against.
+     * @param state     The current visitor state.
+     * @return A description of the match, including suggested fixes.
+     */
     @Override
     public Description matchCatch(CatchTree catchTree, VisitorState state) {
         Name exceptionName = state.getNames().fromString(catchTree.getParameter().getName().toString());
@@ -47,6 +60,4 @@ public final class LogExceptionChecker extends BugChecker implements BugChecker.
         }
         return Description.NO_MATCH;
     }
-
-    private static final String LOG_METHOD_NAME = ".error";
 }
