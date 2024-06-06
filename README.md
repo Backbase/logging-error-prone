@@ -14,7 +14,7 @@
         <annotationProcessorPaths>
             <path>
                 <groupId>org.custom</groupId>
-                <artifactId>CatchBlockLogException</artifactId>
+                <artifactId>LogChecking</artifactId>
                 <version>1.0-SNAPSHOT</version>
             </path>
         </annotationProcessorPaths>
