@@ -26,7 +26,7 @@ import javax.annotation.Nullable;
 @AutoService(BugChecker.class)
 @BugPattern(
         name = "CatchBlockLogException",
-        link = "https://github.com/Backbase/logging-error-prone/blob/develop/docs/LoggingRules.md#log-statement-in-the-catch-block-does-not-log-the-caught-exception",
+        link = "https://github.com/Backbase/logging-error-prone/blob/develop/docs/LoggingRules.md#only-the-error-log-level-should-be-logged-in-the-catch-block",
         linkType = BugPattern.LinkType.CUSTOM,
         severity = BugPattern.SeverityLevel.ERROR,
         summary = "You use debug or info log method in catch block.")
@@ -41,7 +41,6 @@ public final class CatchBlockLogException extends BugChecker implements BugCheck
 
     private static final Matcher<Tree> containslogMethod =
             Matchers.contains(Matchers.toType(ExpressionTree.class, logMethod));
-
 
     /**
      * Matches catch blocks that contain debug or info log methods.
@@ -61,7 +60,6 @@ public final class CatchBlockLogException extends BugChecker implements BugCheck
         return Description.NO_MATCH;
     }
 
-
     /**
      * Attempts to provide a suggested fix for the matched catch block.
      *
@@ -69,37 +67,25 @@ public final class CatchBlockLogException extends BugChecker implements BugCheck
      * @param state The current visitor state.
      * @return A suggested fix to replace the offending log statement.
      */
-    private static SuggestedFix attemptFix(CatchTree tree, VisitorState state) {
+    public static SuggestedFix attemptFix(CatchTree tree, VisitorState state) {
+        SuggestedFix.Builder fixBuilder = SuggestedFix.builder();
         List<MethodInvocationTree> matchingLoggingStatements =
                 tree.getBlock().accept(LogStatementScanner.INSTANCE, state);
-        if (matchingLoggingStatements == null || matchingLoggingStatements.size() != 1) {
-            return SuggestedFix.emptyFix();
-        }
-        MethodInvocationTree loggingInvocation = matchingLoggingStatements.get(0);
-        List<? extends ExpressionTree> loggingArguments = loggingInvocation.getArguments();
-        // There are no valid log invocations without at least a single argument.
-        ExpressionTree lastArgument = loggingArguments.get(loggingArguments.size() - 1);
-        return SuggestedFix.builder()
-                .replace(
-                        lastArgument,
-                        lastArgument
-                                .accept(ThrowableFromArgVisitor.INSTANCE, state)
-                                .orElseGet(() -> state.getSourceForNode(lastArgument)
-                                        + ", "
-                                        + tree.getParameter().getName()) + ", test string" + ", " + loggingInvocation.getMethodSelect())
-                .build();
-//        return SuggestedFix.builder()
-//              .replace(
-//                      loggingInvocation.getMethodSelect(),
-//                      "log.error").build();
-    }
 
+        for (MethodInvocationTree loggingInvocation : matchingLoggingStatements) {
+            fixBuilder.replace(
+                    loggingInvocation.getMethodSelect(),
+                    "log.error"
+            );
+        }
+
+        return fixBuilder.build();
+    }
 
     /**
      * Visitor to check if a method invocation contains a throwable's getMessage call.
      */
     private static final class ThrowableFromArgVisitor extends SimpleTreeVisitor<Optional<String>, VisitorState> {
-        private static final ThrowableFromArgVisitor INSTANCE = new ThrowableFromArgVisitor();
 
         private static final Matcher<ExpressionTree> throwableMessageInvocation = Matchers.instanceMethod()
                 .onDescendantOf(Throwable.class.getName())
